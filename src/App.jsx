@@ -4,33 +4,41 @@ import './App.css';
 function App() {
   const [name, setName] = useState('');
   const [namesList, setNamesList] = useState([]);
-
   const [text, setText] = useState('');
+
   const [reverseText, setReverseText] = useState('');
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-
   const [color, setColor] = useState("");
-
   const [firstName, setFirstName] = useState("");
+
   const [lastName, setLastName] = useState("");
   const [date, setDate] = useState("");
-  const [gender, setGender] = useState("female")
-  ;
+  const [gender, setGender] = useState("female");
+
   const [inputs, setInputs] = useState([]);
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
-  const [sum, setSum] = useState(0);
 
+  const [sum, setSum] = useState(0);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [termsAccepted, setTermsAccepted] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState('');
-  const [isTermsChecked, setIsTermsChecked] = useState(false);
+  
 
+  const [votes, setVotes] = useState({
+    JavaScript: 0,
+    Python: 0,
+    Java: 0
+  });
+  const handleVote = (language) => {
+    setVotes(prevVotes => ({
+      ...prevVotes,
+      [language]: prevVotes[language] + 1
+    }));
+  };
   const addingInput = () => {
     setInputs([...inputs, ""]);
   };
@@ -63,24 +71,26 @@ function App() {
       setName('');
     }
   };
+
   const handleClearList = () => {
     setNamesList([]);
   };
-const handlePasswordChange = (e) => {
+
+  const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+
   const showPasswordChange = (e) => {
     setShowPassword(!showPassword);
   };
+
   const handleColorChange = (e) => {
     setColor(e.target.value);
   };
-
   document.body.style.backgroundColor = color;
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
   };
-
   const handleLastNameChange = (e) => {
     setLastName(e.target.value);
   };
@@ -90,41 +100,30 @@ const handlePasswordChange = (e) => {
   const handleGenderChange = (e) => {
     setGender(e.target.value);
   };
+
   const handleSubmitChange = (e) => {
     e.preventDefault();
     console.log({ firstName, lastName, date, gender });
   };
+
   const handleNumber1Change = (e) => {
     setNumber1(Number(e.target.value));
   };
   const handleNumber2Change = (e) => {
     setNumber2(Number(e.target.value));
   };
+
   const calculateSum = () => {
     setSum(number1 + number2);
   };
-  const handleTermsSubmit = (e) => {
-    e.preventDefault();
-    if (!isTermsChecked) {
-      setErrorMessage('Click to I agree');
-      return;
-    }
-    setErrorMessage('');
-    alert('Forma yuborildi');
-  };
-
-  const handleTermsChange = (e) => {
-    setIsTermsChecked(e.target.checked);
-  };
-
   const handleValidationSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !phone) {
-      setErrorMessage('Barcha maydonlarni toldir');
+      setErrorMessage('barcha maydonlarni toldir');
       return;
     }
     setErrorMessage('');
-    alert('Forma yuborildi');
+    alert('muvaffaqiyatli yuborildi');
   };
 
   return (
@@ -185,34 +184,30 @@ const handlePasswordChange = (e) => {
           value={firstName}
           onChange={handleFirstNameChange}
           placeholder='Enter Name'
-          id='pick-color'
+          id='enter-name'
         />
         <input
           type="text"
           value={lastName}
           onChange={handleLastNameChange}
           placeholder='Enter a lastname'
-          id='pick-color'
+          id='enter-name'
         />
         <input
           type="date"
           value={date}
           onChange={handleDateChange}
-          placeholder='date'
-          id='pick-color'
+          id='enter-name'
         />
-        <select
-          id="pick-color"
-          value={gender}
-          onChange={handleGenderChange}
-        >
+        <select value={gender} onChange={handleGenderChange}
+        id='enter-name'>
           <option value="male">Male</option>
           <option value="female">female</option>
           <option value="not a human but a dog">not a human but a dog</option>
         </select>
-        <button type='submit' id='pick-color'>Submit</button>
+        <button className='btn-clear' type='submit'>Submit</button>
       </form>
-      <h2 className='name-title'>Input Qo'shuvchi</h2>
+      <h2 className="name-title">Input Qo'shuvchi</h2>
       <form onSubmit={handleFormSubmit}>
         {inputs.map((input, index) => (
           <div key={index}>
@@ -224,10 +219,23 @@ const handlePasswordChange = (e) => {
             />
           </div>
         ))}
-        <button type="button" className='btn-clear' onClick={addingInput}>Add Input</button>
-        <button type="submit" className='btn-clear'>Submit</button>
+        <button type="button" className="btn-clear" onClick={addingInput}>Add Input</button>
+        <button type="submit" className="btn-clear">Submit</button>
       </form>
-      <h2 className="name-title">Qo'shish</h2>
+      <h2 className="name-title">Ovoz berish</h2>
+      <div className="voting-system">
+        <button id='enter-name' onClick={() => handleVote('JavaScript')}>JavaScript</button>
+        <button id='enter-name' onClick={() => handleVote('Python')}>Python</button>
+        <button id='enter-name' onClick={() => handleVote('Java')}>Java</button>
+
+        <h3>Results:</h3>
+        <ul className='nav-list'>
+          <li>JavaScript: {votes.JavaScript} votes</li>
+          <li>Python: {votes.Python} votes</li>
+          <li>Java: {votes.Java} votes</li>
+        </ul>
+      </div>
+      <h2 className="name-title">Hisoblash Kalkulyatori</h2>
       <div className="calculator">
         <input
           type="number"
@@ -243,10 +251,10 @@ const handlePasswordChange = (e) => {
           placeholder="second number"
           id='enter-name'
         />
-        <button className='btn-name' onClick={calculateSum}>Calculate</button>
-        <h2>Javobi: {sum}</h2>
+        <button onClick={calculateSum}>Calculate</button>
+        <h2>Result: {sum}</h2>
       </div>
-      <h1 className='name-title'>Maydonlarni Tekshirish</h1>
+      <h1 className="name-title">To'ldirilmagan Maydonlarni Tekshirish</h1>
       <form onSubmit={handleValidationSubmit}>
         <input
           type="text"
@@ -270,37 +278,10 @@ const handlePasswordChange = (e) => {
           id='enter-name'
         />
         {errorMessage && <h4 style={{ color: 'red' }}>{errorMessage}</h4>}
-        <button type="submit">Yubor</button>
-      </form>
-      <h1 className='name-title'>Agree to terms</h1>
-      <form onSubmit={handleTermsSubmit}>
-        <input
-          type="text"
-          placeholder="Ism"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          id='enter-name'
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          id='enter-name'
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={isTermsChecked}
-            onChange={handleTermsChange}
-            className='btn-name'
-          />
-          I agree
-        </label>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button className='btn-name' type="submit">Send</button>
+        <button className='btn-name' type="submit">Yubor</button>
       </form>
     </div>
   );
 }
+
 export default App;
